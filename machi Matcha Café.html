@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>machi | Matcha Café</title>
+<meta name="description" content="machi is a matcha café serving ceremonial-grade matcha lattes, iced matcha, and matcha desserts.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍵</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBF7EC;
+    --surface: #ffffff;
+    --text: #2B2A1E;
+    --muted: #6E6A56;
+    --accent: #7C9A3E;
+    --accent-deep: #3E5A1F;
+    --sun: #F4C2C2;
+    --border: #E6DCC4;
+    --radius: 18px;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14190F; --surface: #1D2417; --text: #F3EFDF; --muted: #A9B38F;
+      --accent: #A8C878; --accent-deep: #DCE8BE; --sun: #F4C2C2; --border: #323D27;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14190F; --surface: #1D2417; --text: #F3EFDF; --muted: #A9B38F;
+    --accent: #A8C878; --accent-deep: #DCE8BE; --sun: #F4C2C2; --border: #323D27;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+  body { font-family: "Inter", system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3 { font-family: "Fraunces", Georgia, serif; line-height: 1.15; }
+  a { color: inherit; text-decoration: none; }
+  .wrap { width: min(1120px, 92%); margin: 0 auto; }
+  section { padding: 96px 0; }
+
+  .btn { display: inline-block; padding: 14px 28px; border-radius: 999px; font-weight: 600; font-size: 15px; border: 2px solid transparent; cursor: pointer; transition: transform .2s, background .2s, color .2s; }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { transform: translateY(-2px); }
+  .btn-ghost { border-color: var(--text); color: var(--text); background: transparent; }
+  .btn-ghost:hover { background: var(--text); color: var(--bg); }
+
+  header { position: fixed; top: 0; left: 0; right: 0; z-index: 50; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); background: color-mix(in srgb, var(--bg) 85%, transparent); border-bottom: 1px solid var(--border); padding-top: env(safe-area-inset-top, 0px); }
+  nav { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+  .logo { font-family: "Fraunces", serif; font-weight: 800; font-size: 26px; letter-spacing: -0.5px; }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { font-weight: 500; font-size: 15px; color: var(--muted); transition: color .2s; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta { display: flex; gap: 12px; align-items: center; }
+  .theme-toggle { background: none; border: 1px solid var(--border); color: var(--text); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 16px; }
+  .menu-btn { display: none; background: none; border: none; color: var(--text); font-size: 26px; cursor: pointer; }
+  .mobile-menu { display: none; position: fixed; inset: 72px 0 0 0; background: var(--bg); padding: 32px 6%; flex-direction: column; gap: 24px; z-index: 40; }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { font-family: "Fraunces", serif; font-size: 28px; font-weight: 600; }
+
+  .hero { min-height: 100vh; display: grid; place-items: center; padding-top: 120px; background: radial-gradient(ellipse at 15% 10%, color-mix(in srgb, var(--sun) 35%, transparent), transparent 55%), radial-gradient(ellipse at 90% 85%, color-mix(in srgb, var(--accent) 25%, transparent), transparent 55%), var(--bg); }
+  .hero-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: center; }
+  .eyebrow { display: inline-block; font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; }
+  .hero h1 { font-size: clamp(52px, 9vw, 104px); font-weight: 800; letter-spacing: -2px; }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero p { max-width: 520px; margin: 22px 0 36px; color: var(--muted); font-size: 18px; }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+  .cup { width: min(380px, 80%); margin: 0 auto; display: block; animation: float 6s ease-in-out infinite; }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-16px); } }
+  .fade-up { opacity: 0; transform: translateY(24px); animation: fadeUp .8s forwards; }
+  .fade-up.d1 { animation-delay: .15s; } .fade-up.d2 { animation-delay: .3s; } .fade-up.d3 { animation-delay: .45s; }
+  @keyframes fadeUp { to { opacity: 1; transform: none; } }
+
+  .marquee { overflow: hidden; background: var(--accent-deep); color: var(--bg); padding: 18px 0; white-space: nowrap; }
+  .marquee-track { display: inline-block; animation: scroll 28s linear infinite; font-family: "Fraunces", serif; font-size: 22px; font-weight: 600; }
+  .marquee-track span { margin: 0 28px; }
+  @keyframes scroll { to { transform: translateX(-50%); } }
+
+  .head { text-align: center; margin-bottom: 56px; }
+  .head h2 { font-size: clamp(36px, 5vw, 56px); font-weight: 800; letter-spacing: -1px; }
+  .head p { color: var(--muted); margin-top: 12px; }
+
+  .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; transition: transform .3s, box-shadow .3s; }
+  .card:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(20,40,10,.14); }
+  .card svg { width: 100%; height: 150px; margin-bottom: 18px; }
+  .card h3 { font-size: 22px; margin-bottom: 8px; }
+  .card p { color: var(--muted); font-size: 15px; margin-bottom: 16px; }
+  .price { font-weight: 700; color: var(--accent); }
+
+  .story { background: var(--surface); }
+  .story-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 64px; align-items: center; }
+  .story h2 { font-size: clamp(34px, 4.5vw, 52px); font-weight: 800; margin-bottom: 20px; }
+  .story p { color: var(--muted); margin-bottom: 16px; }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .stat { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 36px 24px; text-align: center; }
+  .stat .num { font-family: "Fraunces", serif; font-size: 52px; font-weight: 800; color: var(--accent); }
+  .stat .label { color: var(--muted); font-size: 14px; margin-top: 6px; }
+
+  .video { position: relative; border-radius: 28px; overflow: hidden; min-height: 440px; display: grid; place-items: center; color: #fff; text-align: center; background: linear-gradient(135deg, #3E5A1F, #7C9A3E); padding: 60px 24px; }
+  .video h2 { font-size: clamp(32px, 5vw, 56px); margin-bottom: 24px; }
+  .play { width: 84px; height: 84px; border-radius: 50%; border: none; cursor: pointer; background: #fff; color: var(--accent-deep); font-size: 28px; padding-left: 6px; transition: transform .2s; margin: 0 auto 20px; display: block; }
+  .play:hover { transform: scale(1.1); }
+  .video-note { font-size: 14px; opacity: .85; }
+
+  .signup { text-align: center; }
+  .signup form { display: flex; gap: 12px; max-width: 520px; margin: 32px auto 0; flex-wrap: wrap; justify-content: center; }
+  .signup input { flex: 1 1 260px; padding: 16px 22px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font: inherit; outline: none; }
+  .signup input:focus { border-color: var(--accent); }
+  .msg { margin-top: 16px; font-size: 15px; min-height: 22px; color: var(--muted); }
+
+  .visit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+  .visit-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; }
+  .visit-card h3 { font-size: 22px; margin-bottom: 14px; }
+  .visit-card ul { list-style: none; }
+  .visit-card li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--border); color: var(--muted); font-size: 15px; }
+
+  footer { border-top: 1px solid var(--border); padding: 64px 0 40px; }
+  .footer-top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 32px; }
+  .footer-top p { color: var(--muted); max-width: 320px; margin-top: 12px; font-size: 15px; }
+  .footer-links { display: flex; gap: 48px; flex-wrap: wrap; }
+  .footer-links h4 { font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  .footer-links a { display: block; margin-bottom: 8px; font-size: 15px; }
+  .footer-links a:hover { color: var(--accent); }
+  .wordmark { font-family: "Fraunces", serif; font-weight: 800; font-size: clamp(72px, 20vw, 240px); letter-spacing: -4px; line-height: .9; text-align: center; margin-top: 56px; color: var(--accent); user-select: none; }
+  .copy { text-align: center; color: var(--muted); font-size: 13px; margin-top: 24px; }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s, transform .7s; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .menu-btn { display: block; }
+    .hero-grid, .story-grid { grid-template-columns: 1fr; gap: 40px; }
+    .hero { min-height: auto; padding-bottom: 72px; }
+    .hero-grid > div:last-child { order: -1; }
+    section { padding: 72px 0; }
+  }
+  @media (max-width: 520px) {
+    .stat .num { font-size: 40px; }
+    .nav-cta .btn { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .reveal, .fade-up { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a href="#top" class="logo">machi<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#story">Our Story</a></li>
+      <li><a href="#video">Watch</a></li>
+      <li><a href="#visit">Visit</a></li>
+    </ul>
+    <div class="nav-cta">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">◐</button>
+      <a href="#order" class="btn btn-primary">Order Now</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+    </div>
+  </nav>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#menu">Menu</a>
+  <a href="#story">Our Story</a>
+  <a href="#video">Watch</a>
+  <a href="#visit">Visit</a>
+  <a href="#order">Order Now</a>
+</div>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow fade-up">Ceremonial-grade matcha · Kyoto-sourced</span>
+        <h1 class="fade-up d1">Green tea, <em>made</em> beautifully.</h1>
+        <p class="fade-up d2">Stone-ground matcha whisked to order, served hot, iced or blended into desserts. Calm, bright and made to slow your morning down.</p>
+        <div class="hero-actions fade-up d3">
+          <a href="#order" class="btn btn-primary">Order Now</a>
+          <a href="#menu" class="btn btn-ghost">See the Menu</a>
+        </div>
+      </div>
+      <div>
+        <svg class="cup" viewBox="0 0 400 400" role="img" aria-label="Illustration of a matcha latte cup">
+          <ellipse cx="200" cy="360" rx="130" ry="18" fill="#3E5A1F" opacity=".18"/>
+          <path d="M110 150 L290 150 L270 330 Q266 350 240 350 L160 350 Q134 350 130 330 Z" fill="#ffffff" stroke="#3E5A1F" stroke-width="4"/>
+          <path d="M116 190 L284 190 L276 282 Q272 326 240 326 L160 326 Q128 326 124 282 Z" fill="#8DB255"/>
+          <ellipse cx="200" cy="150" rx="90" ry="20" fill="#A8C878" stroke="#3E5A1F" stroke-width="4"/>
+          <path d="M116 190 Q200 210 284 190" fill="none" stroke="#DCE8BE" stroke-width="6" stroke-linecap="round" opacity=".7"/>
+          <path d="M150 80 q-14 -20 0 -40 q14 -20 0 -40" fill="none" stroke="#7C9A3E" stroke-width="5" stroke-linecap="round" opacity=".5"/>
+          <path d="M200 70 q-14 -20 0 -40 q14 -20 0 -40" fill="none" stroke="#7C9A3E" stroke-width="5" stroke-linecap="round" opacity=".5"/>
+          <path d="M250 80 q-14 -20 0 -40 q14 -20 0 -40" fill="none" stroke="#7C9A3E" stroke-width="5" stroke-linecap="round" opacity=".5"/>
+          <path d="M290 175 Q340 170 340 215 Q340 255 284 250" fill="none" stroke="#3E5A1F" stroke-width="7"/>
+          <circle cx="330" cy="70" r="26" fill="#F4C2C2"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>Stone-ground daily</span><span>✦</span><span>Ceremonial grade</span><span>✦</span><span>Whisked to order</span><span>✦</span><span>Oat & dairy milk</span><span>✦</span>
+      <span>Stone-ground daily</span><span>✦</span><span>Ceremonial grade</span><span>✦</span><span>Whisked to order</span><span>✦</span><span>Oat & dairy milk</span><span>✦</span>
+    </div>
+  </div>
+
+  <section id="menu">
+    <div class="wrap">
+      <div class="head reveal">
+        <h2>Our Menu</h2>
+        <p>Every drink is whisked by hand. Ask for oat or dairy milk.</p>
+      </div>
+      <div class="menu-grid">
+        <article class="card reveal">
+          <svg viewBox="0 0 200 150" aria-hidden="true">
+            <path d="M60 40 L140 40 L130 120 Q128 132 115 132 L85 132 Q72 132 70 120 Z" fill="#fff" stroke="#3E5A1F" stroke-width="3"/>
+            <path d="M64 70 L136 70 L131 116 Q130 128 115 128 L85 128 Q70 128 69 116 Z" fill="#8DB255"/>
+            <ellipse cx="100" cy="40" rx="42" ry="9" fill="#A8C878" stroke="#3E5A1F" stroke-width="3"/>
+          </svg>
+          <h3>Classic Matcha Latte</h3>
+          <p>Ceremonial matcha, steamed milk and a smooth, lightly sweet finish.</p>
+          <span class="price">$5.50</span>
+        </article>
+        <article class="card reveal">
+          <svg viewBox="0 0 200 150" aria-hidden="true">
+            <path d="M60 40 L140 40 L130 120 Q128 132 115 132 L85 132 Q72 132 70 120 Z" fill="#fff" stroke="#3E5A1F" stroke-width="3"/>
+            <path d="M64 70 L136 70 L131 116 Q130 128 115 128 L85 128 Q70 128 69 116 Z" fill="#A8C878"/>
+            <circle cx="100" cy="95" r="6" fill="#F4C2C2"/>
+            <circle cx="85" cy="110" r="4" fill="#F4C2C2"/>
+            <ellipse cx="100" cy="40" rx="42" ry="9" fill="#DCE8BE" stroke="#3E5A1F" stroke-width="3"/>
+          </svg>
+          <h3>Iced Matcha</h3>
+          <p>Bright, refreshing and poured over ice with your choice of milk.</p>
+          <span class="price">$5.75</span>
+        </article>
+        <article class="card reveal">
+          <svg viewBox="0 0 200 150" aria-hidden="true">
+            <ellipse cx="100" cy="110" rx="60" ry="14" fill="#3E5A1F" opacity=".15"/>
+            <path d="M60 60 L140 60 L132 110 Q130 122 118 122 L82 122 Q70 122 68 110 Z" fill="#fff" stroke="#3E5A1F" stroke-width="3"/>
+            <path d="M64 88 L136 88 L132 110 Q130 122 118 122 L82 122 Q70 122 68 110 Z" fill="#8DB255"/>
+            <rect x="66" y="48" width="68" height="14" rx="6" fill="#F4C2C2" stroke="#3E5A1F" stroke-width="2"/>
+          </svg>
+          <h3>Matcha Tiramisu</h3>
+          <p>Layers of matcha mascarpone cream and sponge, dusted with cocoa.</p>
+          <span class="price">$7.00</span>
+        </article>
+        <article class="card reveal">
+          <svg viewBox="0 0 200 150" aria-hidden="true">
+            <ellipse cx="100" cy="115" rx="70" ry="14" fill="#3E5A1F" opacity=".15"/>
+            <path d="M40 100 Q100 60 160 100 Q100 120 40 100 Z" fill="#fff" stroke="#3E5A1F" stroke-width="3"/>
+            <path d="M55 96 Q100 70 145 96 Q100 110 55 96 Z" fill="#7C9A3E"/>
+            <path d="M70 80 q6 -10 12 0 M110 74 q6 -10 12 0" fill="none" stroke="#3E5A1F" stroke-width="2"/>
+          </svg>
+          <h3>Matcha Bowl</h3>
+          <p>Ceremonial matcha powder whisked in a traditional bowl, served with sweets.</p>
+          <span class="price">$9.00</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="story" class="story">
+    <div class="wrap story-grid">
+      <div class="reveal">
+        <span class="eyebrow">Our story</span>
+        <h2>Slow tea, fast smiles.</h2>
+        <p>machi started with one question: why is good matcha so hard to find in a busy city? We source stone-ground, ceremonial-grade leaves and prepare every cup by hand, the way it's meant to be enjoyed.</p>
+        <p>Pull up a stool, take a breath and let us make your next cup.</p>
+        <a href="#order" class="btn btn-ghost" style="margin-top:12px">Order Now</a>
+      </div>
+      <div class="stats reveal">
+        <div class="stat"><div class="num" data-count="8">0</div><div class="label">Years brewing</div></div>
+        <div class="stat"><div class="num" data-count="12">0</div><div class="label">Matcha drinks</div></div>
+        <div class="stat"><div class="num" data-count="25000">0</div><div class="label">Cups served</div></div>
+        <div class="stat"><div class="num" data-count="4.9">0</div><div class="label">Average rating</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="video">
+    <div class="wrap">
+      <div class="video reveal">
+        <div>
+          <h2>See how we whisk</h2>
+          <button class="play" aria-label="Play video">▶</button>
+          <p class="video-note">Placeholder: add your matcha-making video here.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="visit">
+    <div class="wrap">
+      <div class="head reveal">
+        <h2>Visit Us</h2>
+        <p>Come for the matcha. Stay for the quiet.</p>
+      </div>
+      <div class="visit-grid">
+        <div class="visit-card reveal">
+          <h3>Hours</h3>
+          <ul>
+            <li><span>Mon – Fri</span><span>7:00 – 18:00</span></li>
+            <li><span>Saturday</span><span>8:00 – 19:00</span></li>
+            <li><span>Sunday</span><span>9:00 – 17:00</span></li>
+          </ul>
+        </div>
+        <div class="visit-card reveal">
+          <h3>Find Us</h3>
+          <p style="color:var(--muted)">123 Main Street<br>Your City, ST 00000</p>
+          <p style="color:var(--muted);margin-top:14px">Phone: (000) 000-0000</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="order" class="signup">
+    <div class="wrap reveal">
+      <span class="eyebrow">Newsletter</span>
+      <h2 style="font-size:clamp(34px,5vw,56px);font-weight:800;letter-spacing:-1px">Get new drinks first.</h2>
+      <p style="color:var(--muted);margin-top:12px">Seasonal matcha, events and exclusive offers, straight to your inbox.</p>
+      <form id="signupForm" novalidate>
+        <input type="email" id="email" placeholder="you@example.com" aria-label="Email address" required>
+        <button type="submit" class="btn btn-primary">Subscribe</button>
+      </form>
+      <div class="msg" id="msg"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div>
+        <div class="logo">machi<span>.</span></div>
+        <p>Matcha, made slowly and served warmly, every day.</p>
+      </div>
+      <div class="footer-links">
+        <div>
+          <h4>Explore</h4>
+          <a href="#menu">Menu</a>
+          <a href="#story">Our Story</a>
+          <a href="#video">Watch</a>
+        </div>
+        <div>
+          <h4>Visit</h4>
+          <a href="#visit">Hours</a>
+          <a href="#visit">Location</a>
+          <a href="#order">Newsletter</a>
+        </div>
+        <div>
+          <h4>Follow</h4>
+          <a href="#">Instagram</a>
+          <a href="#">TikTok</a>
+        </div>
+      </div>
+    </div>
+    <div class="wordmark">machi.</div>
+    <p class="copy">© <span id="year"></span> machi. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  const root = document.documentElement;
+  const themeBtn = document.getElementById('themeToggle');
+  let mode = 'system';
+  themeBtn.addEventListener('click', () => {
+    const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (mode === 'system') { mode = dark ? 'light' : 'dark'; } else { mode = 'system'; }
+    if (mode === 'system') root.removeAttribute('data-theme'); else root.setAttribute('data-theme', mode);
+  });
+
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', () => {
+    const open = mobileMenu.classList.toggle('open');
+    menuBtn.textContent = open ? '✕' : '☰';
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    mobileMenu.classList.remove('open');
+    menuBtn.textContent = '☰';
+  }));
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  const countIO = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      const target = parseFloat(el.dataset.count);
+      const decimals = el.dataset.count.includes('.');
+      const start = performance.now();
+      const tick = now => {
+        const p = Math.min((now - start) / 1600, 1);
+        const val = target * (1 - Math.pow(1 - p, 3));
+        el.textContent = decimals ? val.toFixed(1) : Math.floor(val).toLocaleString();
+        if (p < 1) requestAnimationFrame(tick);
+        else el.textContent = decimals ? target.toFixed(1) : target.toLocaleString();
+      };
+      requestAnimationFrame(tick);
+      countIO.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('[data-count]').forEach(c => countIO.observe(c));
+
+  const form = document.getElementById('signupForm');
+  const msg = document.getElementById('msg');
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      msg.textContent = 'Please enter a valid email address.';
+      msg.style.color = 'var(--accent)';
+      return;
+    }
+    msg.textContent = 'Thanks for subscribing! Watch your inbox.';
+    msg.style.color = 'var(--muted)';
+    form.reset();
+  });
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
